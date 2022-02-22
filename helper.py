@@ -10,14 +10,6 @@ from led import *
 def check_platform():
     return platform.system()
 
-def load_opencv_api():
-    platform = check_platform()
-
-    if platform == "Windows":
-        return 700
-    elif platform == "Linux":
-        return 0
-
 def searchFile(folder):
     result = []
     for root, dirs, files in os.walk(folder):
@@ -40,6 +32,7 @@ def make_interpreter(result, NUM_THREAD):
         pass
     if edgetpu is None:
         print("Edge TPU Not Detected")
+        NUM_THREAD = 2
         interpreter = Interpreter(model_path=result[0], num_threads=NUM_THREAD)
     else:
         print("Edge TPU Detected")
@@ -49,6 +42,10 @@ def make_interpreter(result, NUM_THREAD):
     return interpreter
         
         
+        
+        
+    
+    
 def build_interpreter(result, USE_TPU, NUM_THREAD):
     platform = check_platform()
     pkg = importlib.util.find_spec('tflite_runtime')
@@ -131,9 +128,10 @@ def detect_objects(interpreter, image, threshold):
 def annotate_objects(frame, results, WIDTH, HEIGHT, labels, time1, frame_rate_calc):
     color_box = [(0,0,255), (255,0,0), (0,255,255), (255,255,0)]
     hide_led()
+    
     if isinstance(results, type(None)):
         return frame
-        
+    
     for obj in results:
     
       ymin, xmin, ymax, xmax = obj['bounding_box']
@@ -220,6 +218,7 @@ class WebcamVideoStream:
         while True:
             # if the thread indicator variable is set, stop the thread
             if self.stopped:
+                
                 return
 
             # otherwise, read the next frame from the stream
@@ -232,3 +231,4 @@ class WebcamVideoStream:
     def stop(self):
         # indicate that the thread should be stopped
         self.stopped = True
+        self.stream.release()

@@ -30,7 +30,6 @@ from kivy.core.window import Window
 import cv2
 import time
 import os
-import multiprocessing as mp
 from helper import *
 
 Builder.load_string('''
@@ -109,7 +108,7 @@ class AppCam(Image):
             
             frame_rgb = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
             frame_resized = cv2.resize(frame_rgb, (w, h))
-            input_data = np.expand_dims(frame_resized, axis=0)
+            input_data = np.expand_dims(frame_resized, axis=0).astype('uint8')
             results = self.detect_objects(self.parent.interpreter, input_data, self.threshold)
 
             self.annotateObject(self.frame, results, self.parent.RES[0],self.parent.RES[1], self.parent.labels, self.time1 ,self.frame_rate_calc)
@@ -181,6 +180,7 @@ class AppCam(Image):
     def stop(self):
         Clock.unschedule(self.update)
         
+        
 class Main(BoxLayout):
     
     ssFolder = os.path.join(os.getcwd(),'screenshot')
@@ -215,7 +215,10 @@ class Main(BoxLayout):
         
     def stopped(self): 
 #         self.capture.release()
+        
         self.capture.stop()
+#         self.capture.stream.release()
+      
       
 class Apps(App):
     
@@ -250,7 +253,7 @@ class Apps(App):
         self.labels = load_tflite_label(self.LABEL_NAME)
         Logger.info('Application: Succesfully load label '+str(self.labels))
         
-        time.sleep(2)
+        time.sleep(1)
 
         #load Interface
         self.mainLayout = Main(self.CAM_NUM, self.RES, self.FPS, self.API)
@@ -261,8 +264,12 @@ class Apps(App):
     def on_stop(self):
         
         self.mainLayout.stopped()
+
+        
     
 if __name__ == "__main__":
     
     apps = Apps()
-    apps.run()
+    threading.Thread(target=apps.run())
+    sys.exit(0)
+    

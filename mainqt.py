@@ -3,7 +3,7 @@ from helper import *
 from PyQt5.QtCore import QTimer, QPoint, pyqtSignal, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTextEdit, QLabel
 from PyQt5.QtWidgets import QWidget, QAction, QVBoxLayout, QHBoxLayout
-from PyQt5.QtGui import QFont, QPainter, QImage, QTextCursor
+from PyQt5.QtGui import QFont, QPainter, QImage, QTextCursor, QIcon
 
 import queue as Queue
 
@@ -36,6 +36,11 @@ class Window(QMainWindow):
         exitAction.setShortcut('Ctrl+Q')
         exitAction.triggered.connect(self.close)
         self.addAction(exitAction)
+        
+        TITLE = "Traffic Sign Detection Using Raspberry Pi 4"
+        self.setWindowTitle(TITLE)
+        self.setWindowIcon(QIcon('Undip.png'))
+        self.show()
 
     def start(self):
         self.timer = QTimer(self)         
@@ -138,7 +143,7 @@ if __name__ == '__main__':
     
     img_queue    = Queue.Queue()
     FORMAT       = QImage.Format_RGB888
-    DISP_MSEC    = 10               
+    DISP_MSEC    = 5               
     FONT         = QFont("Helvetica", 10)
     capture      = True
     
@@ -165,14 +170,9 @@ if __name__ == '__main__':
 
     labels = load_tflite_label(LABEL_NAME)
     print(labels)
-    
-    TITLE = "Traffic Sign Detection Using Raspberry Pi 4"
     app = QApplication(sys.argv)
     win = Window()
-    win.show()
-    win.setWindowTitle(TITLE)
     win.start()
     sys.exit(app.exec_())
-    sys.exit(0)
 
 
