@@ -20,4 +20,7 @@ def hide_led():
         text(draw, (0, 0), "", fill="white")
     time.sleep(1/1000)
     
+def poweroff_led():
+    device.cleanup()
+    
 

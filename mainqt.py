@@ -137,6 +137,7 @@ def main(cam_num, queue):
     
     cap.stop()
     del cap
+    poweroff_led()
     time.sleep(2)
 
 if __name__ == '__main__':

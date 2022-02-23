@@ -264,6 +264,7 @@ class Apps(App):
     def on_stop(self):
         
         self.mainLayout.stopped()
+        poweroff_led()
 
         
     

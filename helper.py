@@ -6,7 +6,6 @@ from tflite_runtime.interpreter import Interpreter
 from tflite_runtime.interpreter import load_delegate
 from led import *
 
-
 def check_platform():
     return platform.system()
 
