@@ -40,11 +40,6 @@ def make_interpreter(result, NUM_THREAD):
     interpreter.allocate_tensors()
     return interpreter
         
-        
-        
-        
-    
-    
 def build_interpreter(result, USE_TPU, NUM_THREAD):
     platform = check_platform()
     pkg = importlib.util.find_spec('tflite_runtime')
@@ -196,8 +191,6 @@ class WebcamVideoStream:
         self.stream.set(cv2.CAP_PROP_FPS, fps)
         (self.grabbed, self.frame) = self.stream.read()
   
-
-
         # initialize the thread name
         self.name = name
 
